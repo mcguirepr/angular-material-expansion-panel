@@ -661,6 +661,7 @@ function expansionPanelExpandedDirective($animateCss, $timeout) {
     var innerTemplate;
 
     if (attrs.lazyRender !== undefined) {
+      element.children().attr("ng-cloak", "");
       innerTemplate = element.html();
       element.empty();
     }
@@ -884,7 +885,8 @@ function expansionPanelGroupDirective() {
       removeAll: removeAll,
       collapseAll: collapseAll,
       onChange: onChange,
-      count: panelCount
+      count: panelCount,
+      setMultiple: setMultiple
     }, $attrs.mdComponentId);
 
     vm.addPanel = addPanel;
@@ -905,7 +907,21 @@ function expansionPanelGroupDirective() {
       });
     });
 
-
+    function setMultiple(allowMultiple, idToKeepOpen){
+      multipleExpand = allowMultiple;
+      if(allowMultiple){
+        if(!idToKeepOpen){
+          getOpen().then(function(openItems){
+            if (openItems.length > 1) {
+              var panelIdToKeepOpen = Object.keys(openItems)[0];
+              closeOthers(panelIdToKeepOpen);
+            }
+          })
+        } else {
+          closeOthers(idToKeepOpen);
+        }
+      }
+    }
 
     function onChange(callback) {
       onChangeFuncs.push(callback);
@@ -1084,6 +1100,7 @@ function expansionPanelGroupService($mdComponentRegistry, $mdUtil, $mdExpansionP
       removeAll: removeAll,
       collapseAll: collapseAll,
       onChange: onChange,
+      setMultiple: setMultiple,
       count: count
     };
 
@@ -1127,6 +1144,9 @@ function expansionPanelGroupService($mdComponentRegistry, $mdUtil, $mdExpansionP
       instance.collapseAll(noAnimation);
     }
 
+    function setMultiple(allowMultiple, idToKeepOpen){
+      instance.setMultiple(allowMultiple, idToKeepOpen);
+    }
 
     function add(options, locals) {
       locals = locals || {};

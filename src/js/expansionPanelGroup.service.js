@@ -79,6 +79,7 @@ function expansionPanelGroupService($mdComponentRegistry, $mdUtil, $mdExpansionP
       removeAll: removeAll,
       collapseAll: collapseAll,
       onChange: onChange,
+      setMultiple: setMultiple,
       count: count
     };
 
@@ -122,6 +123,9 @@ function expansionPanelGroupService($mdComponentRegistry, $mdUtil, $mdExpansionP
       instance.collapseAll(noAnimation);
     }
 
+    function setMultiple(allowMultiple, idToKeepOpen){
+      instance.setMultiple(allowMultiple, idToKeepOpen);
+    }
 
     function add(options, locals) {
       locals = locals || {};

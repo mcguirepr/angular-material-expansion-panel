@@ -46,7 +46,8 @@ function expansionPanelGroupDirective() {
       removeAll: removeAll,
       collapseAll: collapseAll,
       onChange: onChange,
-      count: panelCount
+      count: panelCount,
+      setMultiple: setMultiple
     }, $attrs.mdComponentId);
 
     vm.addPanel = addPanel;
@@ -67,7 +68,21 @@ function expansionPanelGroupDirective() {
       });
     });
 
-
+    function setMultiple(allowMultiple, idToKeepOpen){
+      multipleExpand = allowMultiple;
+      if(allowMultiple){
+        if(!idToKeepOpen){
+          getOpen().then(function(openItems){
+            if (openItems.length > 1) {
+              var panelIdToKeepOpen = Object.keys(openItems)[0];
+              closeOthers(panelIdToKeepOpen);
+            }
+          })
+        } else {
+          closeOthers(idToKeepOpen);
+        }
+      }
+    }
 
     function onChange(callback) {
       onChangeFuncs.push(callback);
