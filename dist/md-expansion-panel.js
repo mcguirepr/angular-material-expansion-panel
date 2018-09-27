@@ -908,15 +908,15 @@ function expansionPanelGroupDirective() {
     });
 
     function setMultiple(allowMultiple, idToKeepOpen){
+      var previousMultipleExpand = multipleExpand;
       multipleExpand = allowMultiple;
-      if(allowMultiple){
+      if (!allowMultiple && previousMultipleExpand != allowMultiple){
         if(!idToKeepOpen){
-          getOpen().then(function(openItems){
-            if (openItems.length > 1) {
-              var panelIdToKeepOpen = Object.keys(openItems)[0];
-              closeOthers(panelIdToKeepOpen);
-            }
-          })
+          var openItems = getOpen();
+          if (openItems.length > 1) {
+            var panelIdToKeepOpen = Object.keys(openItems)[0];
+            closeOthers(panelIdToKeepOpen);
+          }
         } else {
           closeOthers(idToKeepOpen);
         }
