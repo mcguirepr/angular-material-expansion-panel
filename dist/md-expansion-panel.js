@@ -1351,9 +1351,15 @@ function expansionPanelHeaderDirective() {
 function mdExpansionPanelIconDirective() {
   var directive = {
     restrict: 'E',
-    template: '<md-icon class="md-expansion-panel-icon" md-svg-icon="icons/ic_keyboard_arrow_right_black_24px.svg"></md-icon>',
-    replace: true
+    template: '<md-icon class="md-expansion-panel-icon" md-svg-icon="{{iconSrc}}"></md-icon>',
+    replace: true,
+    link: link
   };
+
+  function link(scope, element, attrs) {
+    scope.iconSrc = attrs.iconSrc ? attrs.iconSrc : "icons/ic_keyboard_arrow_right_black_24px.svg";
+  }
+
   return directive;
 }
 }());
